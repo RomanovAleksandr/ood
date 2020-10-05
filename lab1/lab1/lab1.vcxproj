@@ -151,9 +151,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ShapeProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseShapeDecorator.h" />
     <ClInclude Include="CircleShapeDecorator.h" />
+    <ClInclude Include="RectangleShapeDecorator.h" />
+    <ClInclude Include="ShapeProcess.h" />
+    <ClInclude Include="TriangleShapeDecorator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

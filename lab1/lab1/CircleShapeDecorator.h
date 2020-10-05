@@ -1,38 +1,23 @@
 #pragma once
+#include "BaseShapeDecorator.h"
+#include <SFML/Graphics.hpp>
 
-class CircleShapeDecorator : public sf::Shape
+class CircleShapeDecorator : public BaseShapeDecorator
 {
 public:
-	sf::CircleShape& m_circle;
+	sf::Shape* m_circle;
 
-	CircleShapeDecorator(sf::CircleShape &circle) : m_circle(circle)
+	CircleShapeDecorator(sf::Shape* circle) : m_circle(circle)
 	{
 	}
 
-	void Display(sf::RenderWindow &window)
+	float GetArea() override
 	{
-		window.draw(m_circle);
+		return 3.14f * pow(static_cast<sf::CircleShape*>(m_circle)->getRadius(), 2);
 	}
 
-	float GetArea()
+	float GetPerimeter() override
 	{
-		return 3.14f * pow(m_circle.getRadius(), 2);
+		return 2 * 3.14f * static_cast<sf::CircleShape*>(m_circle)->getRadius();
 	}
-
-	float GetPerimeter()
-	{
-		return 2 * 3.14f * m_circle.getRadius();
-	}
-
-	std::size_t getPointCount() const override
-	{
-		return 0;
-	}
-	sf::Vector2f getPoint(std::size_t index) const override
-	{
-		return sf::Vector2f{ 0,0 };
-	}
-
-private:
-
 };

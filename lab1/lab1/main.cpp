@@ -1,22 +1,27 @@
 #include <SFML/Graphics.hpp>
-#include "CircleShapeDecorator.h"
 #include <iostream>
+#include "BaseShapeDecorator.h"
+#include "CircleShapeDecorator.h"
+#include "RectangleShapeDecorator.h"
+#include "ShapeProcess.h"
+#include <vector>
+
+using namespace std;
 
 int main()
 {
-    sf::CircleShape *circle = new sf::CircleShape(100);
-    circle->setFillColor(sf::Color::Green);
-    CircleShapeDecorator* decorator = new CircleShapeDecorator(*circle);
+    vector<sf::Shape*> shapes;
+    ReadShapes(shapes, "input.txt");
+    SaveShapes(shapes, "output.txt");
 
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 
-    decorator->Display(window);
+    for (sf::Shape* shape : shapes)
+    {
+        window.draw(*shape);
+    }
+
     window.display();
-
-    std::cout << decorator->GetArea() << std::endl;
-
-    /*sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);*/
 
     while (window.isOpen())
     {
