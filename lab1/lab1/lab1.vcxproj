@@ -156,6 +156,8 @@
   <ItemGroup>
     <ClInclude Include="BaseShapeDecorator.h" />
     <ClInclude Include="CircleShapeDecorator.h" />
+    <ClInclude Include="Composite.h" />
+    <ClInclude Include="Intersection.h" />
     <ClInclude Include="RectangleShapeDecorator.h" />
     <ClInclude Include="ShapeProcess.h" />
     <ClInclude Include="TriangleShapeDecorator.h" />
