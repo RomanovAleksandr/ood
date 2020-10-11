@@ -5,19 +5,17 @@
 class RectangleShapeDecorator : public BaseShapeDecorator
 {
 public:
-	sf::Shape* m_rectangle;
-
-	RectangleShapeDecorator(sf::Shape* rectangle) : m_rectangle(rectangle)
+	RectangleShapeDecorator(sf::Shape* rectangle) : BaseShapeDecorator(rectangle)
 	{
 	}
 
 	float GetArea() override
 	{
-		return static_cast<sf::RectangleShape*>(m_rectangle)->getSize().x * static_cast<sf::RectangleShape*>(m_rectangle)->getSize().y;
+		return static_cast<sf::RectangleShape*>(m_shape)->getSize().x * static_cast<sf::RectangleShape*>(m_shape)->getSize().y;
 	}
 
 	float GetPerimeter() override
 	{
-		return static_cast<sf::RectangleShape*>(m_rectangle)->getSize().x * 2 + static_cast<sf::RectangleShape*>(m_rectangle)->getSize().y * 2;
+		return static_cast<sf::RectangleShape*>(m_shape)->getSize().x * 2 + static_cast<sf::RectangleShape*>(m_shape)->getSize().y * 2;
 	}
 };

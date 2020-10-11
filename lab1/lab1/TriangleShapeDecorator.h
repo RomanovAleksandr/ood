@@ -5,15 +5,13 @@
 class TriangleShapeDecorator : public BaseShapeDecorator
 {
 public:
-	sf::Shape* m_triangle;
-
-	TriangleShapeDecorator(sf::Shape* triangle) : m_triangle(triangle)
+	TriangleShapeDecorator(sf::Shape* triangle) : BaseShapeDecorator(triangle)
 	{
 	}
 
 	float GetArea() override
 	{
-		sf::ConvexShape* triangle = static_cast<sf::ConvexShape*>(m_triangle);
+		sf::ConvexShape* triangle = static_cast<sf::ConvexShape*>(m_shape);
 		sf::Vector2f a = triangle->getPoint(0);
 		sf::Vector2f b = triangle->getPoint(1);
 		sf::Vector2f c = triangle->getPoint(2);
@@ -22,7 +20,7 @@ public:
 
 	float GetPerimeter() override
 	{
-		sf::ConvexShape* triangle = static_cast<sf::ConvexShape*>(m_triangle);
+		sf::ConvexShape* triangle = static_cast<sf::ConvexShape*>(m_shape);
 		sf::Vector2f a = triangle->getPoint(0);
 		sf::Vector2f b = triangle->getPoint(1);
 		sf::Vector2f c = triangle->getPoint(2);
