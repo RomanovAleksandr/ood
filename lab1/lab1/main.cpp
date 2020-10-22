@@ -12,9 +12,10 @@ using namespace std;
 int main()
 {
     vector<sf::Shape*> shapes;
-    ReadShapes(shapes, "input.txt");
-    SaveShapes(shapes, "output.txt");
-
+    /*ReadShapes(shapes, "input.txt");
+    SaveShapes(shapes, "output.txt");*/
+    sf::Shape* rect = new sf::RectangleShape(sf::Vector2f(100, 100));
+    shapes.push_back(rect);
     sf::RenderWindow window(sf::VideoMode(800, 800), "SFML works!");
 
     for (sf::Shape* shape : shapes)

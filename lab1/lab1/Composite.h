@@ -16,14 +16,14 @@ public:
 	{
 		m_children.remove(component);
 	}
-	void move(const sf::Vector2f& offset)
+	/*void move(const sf::Vector2f& offset)
 	{
 		for (sf::Shape* c : m_children)
 		{
 			c->move(offset);
 		}
-	}
-	void setFillColor(const sf::Color& color)
+	}*/
+	/*void setFillColor(const sf::Color& color)
 	{
 		for (sf::Shape* c : m_children)
 		{
@@ -36,7 +36,7 @@ public:
 				c->setFillColor(color);
 			}
 		}
-	}
+	}*/
 	std::size_t getPointCount() const override
 	{
 		return 0;
