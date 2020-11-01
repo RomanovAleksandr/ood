@@ -2,6 +2,7 @@
 #include <string>
 #include "Circle.h"
 #include <list>
+//#include "InputManager.h"
 
 class Command
 {
@@ -47,3 +48,21 @@ public:
 		}
 	}
 };
+
+//class ChangeInputState : public Command
+//{
+//private:
+//	std::string m_state;
+//	InputManager* m_inputManager;
+//public:
+//	ChangeInputState(std::string state, InputManager* inputManager) : m_state(state), m_inputManager(inputManager)
+//	{
+//	}
+//	void Execute() const
+//	{
+//		if (m_state == "DragAndDropState")
+//		{
+//			m_inputManager->ChangeState(new DragAndDropState());
+//		}
+//	}
+//};

@@ -62,7 +62,7 @@
     <ClInclude Include="ButtonsManager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="State.h">
+    <ClInclude Include="InputState.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,13 @@
 #include "InputManager.h"
 #include "Composite.h"
 
+InputManager::InputManager(std::list<Shape*>& shapes, std::list<Shape*>& selectedShapes, std::list<Button*>& buttons) :
+    m_shapes(shapes), m_selectedShapes(selectedShapes), m_buttons(buttons)
+{
+    //m_state = new DragAndDropState();
+    //m_state->SetContext(this);
+}
+
 void InputManager::Update(sf::Event& event)
 {
     if (event.type == sf::Event::KeyPressed)
@@ -77,6 +84,7 @@ void InputManager::Update(sf::Event& event)
                 if (shape->ContainsPoint(clickPosition))
                 {
                     dragFigure = shape->GetRoot();
+                    selectedShape = shape->GetRoot();
                 }
             }
             for (Button* shape : m_buttons)
@@ -93,22 +101,26 @@ void InputManager::Update(sf::Event& event)
         if (event.mouseButton.button == sf::Mouse::Left)
         {
             dragFigure = nullptr;
+            selectedShape = nullptr;
         }
     }
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
-        if (dragFigure != nullptr)
+        /*if (dragFigure != nullptr)
         {
             dragFigure->move(sf::Vector2f(m_newMousePosition - m_prevMousePosition));
-        }
-        //state->Execute();
+        }*/
+        //m_state->Execute();
     }
     m_prevMousePosition = m_newMousePosition;
     m_newMousePosition = sf::Vector2i(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
     mouseOffset = sf::Vector2f(m_newMousePosition - m_prevMousePosition);
 }
 
-void InputManager::Execute()
+void InputManager::ChangeState(InputState* state)
 {
-    state->Execute();
+    if (this->m_state != nullptr)
+        delete this->m_state;
+    this->m_state = state;
+    //this->m_state->SetContext(this);
 }
