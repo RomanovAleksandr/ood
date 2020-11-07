@@ -1,68 +1,74 @@
 #pragma once
-#include <string>
-#include "Circle.h"
+#include "Shape.h"
 #include <list>
-//#include "InputManager.h"
+class InputManager;
 
-class Command
+class Command 
 {
 public:
-	virtual ~Command()
-	{
-	}
-	virtual void Execute() const = 0;
+    virtual ~Command() {
+    }
+    virtual void Execute() const = 0;
 };
 
-class AddNewShape : public Command
+enum class Shapes
 {
+    Circle,
+    Rectangle,
+    Triangle
+};
+
+class AddShapeCommand : public Command
+{
+public:
+    AddShapeCommand(std::list<Shape*>& shapes, Shapes shape);
+    void Execute() const;
 private:
-	std::string m_shape;
-	std::list<Shape*>& m_shapes;
-public:
-	AddNewShape(std::string shape, std::list<Shape*>& shapes) : m_shape(shape), m_shapes(shapes)
-	{
-	}
-	void Execute() const
-	{
-		if (m_shape == "circle")
-		{
-			m_shapes.push_back(new Circle(sf::Vector2f(100, 100), 50));
-		}
-	}
+    std::list<Shape*>& m_shapes;
+    Shapes m_shape;
 };
 
-class ChangeShapeColor : public Command
+enum class InputManagerStates
 {
-private:
-	sf::Color m_shapeColor;
-	std::list<Shape*>& m_shapes;
-public:
-	ChangeShapeColor(sf::Color color, std::list<Shape*>& shapes) : m_shapeColor(color), m_shapes(shapes)
-	{
-	}
-	void Execute() const
-	{
-		for (Shape* shape : m_shapes)
-		{
-			shape->SetFillColor(m_shapeColor);
-		}
-	}
+    dragAndDrop,
+    changeShapeColor
 };
 
-//class ChangeInputState : public Command
-//{
-//private:
-//	std::string m_state;
-//	InputManager* m_inputManager;
-//public:
-//	ChangeInputState(std::string state, InputManager* inputManager) : m_state(state), m_inputManager(inputManager)
-//	{
-//	}
-//	void Execute() const
-//	{
-//		if (m_state == "DragAndDropState")
-//		{
-//			m_inputManager->ChangeState(new DragAndDropState());
-//		}
-//	}
-//};
+class ChangeInputManagerStateCommand : public Command
+{
+public:
+    ChangeInputManagerStateCommand(InputManager& inputManager, InputManagerStates state);
+    void Execute() const;
+private:
+    InputManager& m_inputManager;
+    InputManagerStates m_state;
+};
+
+class SetSelectedColor : public Command
+{
+public:
+    SetSelectedColor(InputManager& inputManager, sf::Color color);
+    void Execute() const;
+private:
+    InputManager& m_inputManager;
+    sf::Color m_color;
+};
+
+class ChangeOtlineThicknessCommand : public Command
+{
+public:
+    ChangeOtlineThicknessCommand(InputManager& inputManager, float thisckness);
+    void Execute() const;
+private:
+    InputManager& m_inputManager;
+    float m_thisckness;
+};
+
+class ChangeOutlineColorCommand : public Command
+{
+public:
+    ChangeOutlineColorCommand(InputManager& inputManager);
+    void Execute() const;
+private:
+    InputManager& m_inputManager;
+};

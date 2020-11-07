@@ -25,8 +25,9 @@ void Application::Run()
     {
         return;
     }
-    ButtonsManager buttonsManager(shapesManager.m_shapes, shapesManager.m_selectedShapes, font);
-    InputManager inputManager(shapesManager.m_shapes, shapesManager.m_selectedShapes, buttonsManager.m_buttons);
+    ButtonsManager buttonsManager;
+    InputManager inputManager(shapesManager, buttonsManager);
+    buttonsManager.CreateButtons(inputManager, shapesManager, font);
     sf::RenderWindow window(sf::VideoMode(800, 800), "SFML works!");
     
     while (window.isOpen())
@@ -40,14 +41,8 @@ void Application::Run()
         }
 
         window.clear();
-        for (Shape* shape : shapesManager.m_shapes)
-        {
-            shape->Draw(window);
-        }
-        for (Shape* shape : buttonsManager.m_buttons)
-        {
-            shape->Draw(window);
-        }
+        shapesManager.DrawShapes(window);
+        buttonsManager.DrawButtons(window);
         window.display();
     }
 }

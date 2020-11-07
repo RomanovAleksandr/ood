@@ -1,11 +1,11 @@
 #include "InputManager.h"
 #include "Composite.h"
+#include <iostream>
 
-InputManager::InputManager(std::list<Shape*>& shapes, std::list<Shape*>& selectedShapes, std::list<Button*>& buttons) :
-    m_shapes(shapes), m_selectedShapes(selectedShapes), m_buttons(buttons)
+InputManager::InputManager(ShapesManager& shapesManager, ButtonsManager& buttonsManager) :
+    m_shapesManager(shapesManager), m_buttonsManager(buttonsManager)
 {
-    //m_state = new DragAndDropState();
-    //m_state->SetContext(this);
+    this->TransitionTo(new DragAndDropState());
 }
 
 void InputManager::Update(sf::Event& event)
@@ -14,44 +14,11 @@ void InputManager::Update(sf::Event& event)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::G))
         {
-            if (m_selectedShapes.size() > 1)
-            {
-                Composite* composite = new Composite();
-                for (Shape* shape : m_selectedShapes)
-                {
-                    m_shapes.remove(shape);
-                    composite->Add(shape);
-                }
-                m_shapes.push_back(composite);
-                for (Shape* shape : m_selectedShapes)
-                {
-                    shape->SetBorderColor(sf::Color::Transparent);
-                }
-                m_selectedShapes.clear();
-            }
+            m_shapesManager.ComposeShapes();
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::U))
         {
-            for (Shape* shape : m_selectedShapes)
-            {
-                if (shape->IsComposite())
-                {
-                    std::list<Shape*> decomposed = dynamic_cast<Composite*>(shape)->GetChildren();
-                    for (Shape* c : decomposed)
-                    {
-                        c->SetParent(nullptr);
-                        m_shapes.push_back(c);
-                        c->SetBorderColor(sf::Color::Transparent);
-                    }
-                    m_shapes.remove(shape);
-                    delete(shape);
-                }
-                else
-                {
-                    shape->SetBorderColor(sf::Color::Transparent);
-                }
-            }
-            m_selectedShapes.clear();
+            m_shapesManager.DecomposeShapes();
         }
     }
     if (event.type == sf::Event::MouseButtonPressed)
@@ -59,39 +26,15 @@ void InputManager::Update(sf::Event& event)
         sf::Vector2i clickPosition(event.mouseButton.x, event.mouseButton.y);
         if (event.mouseButton.button == sf::Mouse::Right && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            for (Shape* shape : m_shapes)
-            {
-                if (shape->ContainsPoint(clickPosition))
-                {
-                    Shape* root = shape->GetRoot();
-                    if (std::find(m_selectedShapes.begin(), m_selectedShapes.end(), root) != m_selectedShapes.end())
-                    {
-                        root->SetBorderColor(sf::Color::Transparent);
-                        m_selectedShapes.remove(root);
-                    }
-                    else
-                    {
-                        root->SetBorderColor(sf::Color::Red);
-                        m_selectedShapes.push_back(root);
-                    }
-                }
-            }
+            m_shapesManager.SelectShapes(clickPosition);
         }
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
-            for (Shape* shape : m_shapes)
+            if (!m_buttonsManager.ButtonsClick(clickPosition))
             {
-                if (shape->ContainsPoint(clickPosition))
+                if (!m_shapesManager.SelectShape(clickPosition))
                 {
-                    dragFigure = shape->GetRoot();
-                    selectedShape = shape->GetRoot();
-                }
-            }
-            for (Button* shape : m_buttons)
-            {
-                if (shape->ContainsPoint(clickPosition))
-                {
-                    shape->Execute();
+                    m_shapesManager.ClearSelectedShapes();
                 }
             }
         }
@@ -100,27 +43,23 @@ void InputManager::Update(sf::Event& event)
     {
         if (event.mouseButton.button == sf::Mouse::Left)
         {
-            dragFigure = nullptr;
-            selectedShape = nullptr;
+            m_shapesManager.selectedShape = nullptr;
         }
     }
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    if (m_shapesManager.selectedShape != nullptr)
     {
-        /*if (dragFigure != nullptr)
-        {
-            dragFigure->move(sf::Vector2f(m_newMousePosition - m_prevMousePosition));
-        }*/
-        //m_state->Execute();
+        m_state->Execute();
     }
     m_prevMousePosition = m_newMousePosition;
     m_newMousePosition = sf::Vector2i(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
     mouseOffset = sf::Vector2f(m_newMousePosition - m_prevMousePosition);
 }
 
-void InputManager::ChangeState(InputState* state)
+void InputManager::TransitionTo(InputManagerState* state)
 {
+    std::cout << "Context: Transition to " << typeid(*state).name() << ".\n";
     if (this->m_state != nullptr)
         delete this->m_state;
     this->m_state = state;
-    //this->m_state->SetContext(this);
+    this->m_state->SetContext(this);
 }

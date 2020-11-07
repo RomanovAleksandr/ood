@@ -1,25 +1,26 @@
 #pragma once
 #include "Shape.h"
 #include "Button.h"
-#include "InputState.h"
 #include <SFML/Graphics.hpp>
 #include <list>
+#include "InputManagerState.h"
+#include "ShapesManager.h"
+#include "ButtonsManager.h"
 
 class InputManager
 {
 public:
 	void Update(sf::Event& event);
-	InputManager(std::list<Shape*>& shapes, std::list<Shape*>& selectedShapes, std::list<Button*>& buttons);
-	void ChangeState(InputState* state);
+	InputManager(ShapesManager& shapesManager, ButtonsManager& buttonsManager);
 	sf::Vector2f mouseOffset;
 	sf::Color selectedColor;
-	Shape* selectedShape = nullptr;
+	//Shape* selectedShape = nullptr;
+	//std::list<Shape*>& m_selectedShapes;
+	void TransitionTo(InputManagerState* state);
+	ShapesManager& m_shapesManager;
 private:
 	sf::Vector2i m_prevMousePosition;
 	sf::Vector2i m_newMousePosition;
-	std::list<Shape*>& m_shapes;
-	std::list<Shape*>& m_selectedShapes;
-	std::list<Button*>& m_buttons;
-	Shape* dragFigure = nullptr;
-	InputState* m_state = nullptr;
+	InputManagerState* m_state;
+	ButtonsManager& m_buttonsManager;
 };
