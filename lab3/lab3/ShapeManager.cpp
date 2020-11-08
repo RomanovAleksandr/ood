@@ -15,7 +15,7 @@ void ShapesManager::ReadShapes(std::string fileName)
 	{
 		if (line.find("TRIANGLE") != std::string::npos)
 		{
-			std::regex re("TRIANGLE: P1=(.+),(.+); P2=(.+),(.+); P3:(.+),(.+)");
+			std::regex re("TRIANGLE: P1=(.+),(.+); P2=(.+),(.+); P3=(.+),(.+)");
 			std::smatch match;
 			std::regex_search(line, match, re);
 			sf::Vector2f a(stof(match[1]), stof(match[2]));

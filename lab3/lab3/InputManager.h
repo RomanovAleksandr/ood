@@ -14,8 +14,6 @@ public:
 	InputManager(ShapesManager& shapesManager, ButtonsManager& buttonsManager);
 	sf::Vector2f mouseOffset;
 	sf::Color selectedColor;
-	//Shape* selectedShape = nullptr;
-	//std::list<Shape*>& m_selectedShapes;
 	void TransitionTo(InputManagerState* state);
 	ShapesManager& m_shapesManager;
 private:
